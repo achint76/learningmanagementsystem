@@ -10,7 +10,8 @@ module.exports = {
         });
         const dbUser = user[0];
         console.log(dbUser,"SOMEONEISTHERE");
-        if(dbUser == undefined){
+        
+        if((dbUser == undefined) || (dbUser.user_type == "teacher" && dbUser.approved_status !== "approved")){
             res.json({
                 message: `!!!!You are not Signed Up!!!!`
             })

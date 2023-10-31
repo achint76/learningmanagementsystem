@@ -25,6 +25,11 @@ const Users = sequelize.define('usertable', {
         allowNull: false,
        // defaultValue: 'user', // Set the default value to 'user'
     },
+    approved_status: {
+        type: DataTypes.ENUM('approved','disapproved', 'null'),
+        allowNull: true,
+        defaultValue: 'null' 
+    }
 },{
     timestamps:false,
     id: false 
