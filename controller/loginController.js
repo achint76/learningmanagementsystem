@@ -1,6 +1,6 @@
 const sessionService =require('../service/sessionService');
 const jwtService = require('../service/jwtService');
-const loginService = require('../service/loginService')
+const loginService = require('../service/loginService');
 module.exports = {
     loginfunc: async function(req,res){
         const data = req.body;
@@ -13,7 +13,7 @@ module.exports = {
         
         if((dbUser == undefined) || (dbUser.user_type == "teacher" && dbUser.approved_status !== "approved")){
             res.json({
-                message: `!!!!You are not Signed Up!!!!`
+                message: `!!!!You are not allowed to be logged!!!!`
             })
         }
         else if(data.email == dbUser.email && data.password == dbUser.password){

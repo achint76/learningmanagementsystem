@@ -4,6 +4,60 @@ const jwtService = require('../service/jwtService');
 const sessionService = require('../service/sessionService');
 const {Op} = require('sequelize');
 
+const nodemailer = require('nodemailer');
+//const userService = require('../service/userService');
+//const statusmail = async
+const statusMail = async(email,status)=>{
+    return new Promise(async (resolve, reject) => {
+    try{
+const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    requireTLS: true,
+    auth: {
+      user: 'achintya@matrixnmedia.com',
+      pass: 'nvuk ohpc qlie rxdp'
+    }
+})
+
+let approvalMessage;
+if (status === 'approved') {
+    approvalMessage = 'approved for logging.';
+} else if (status === 'disapproved') {
+    approvalMessage = 'disapproved for logging.';
+} else {
+    // Handle the case when the status is unknown
+    approvalMessage = 'pending status.';
+}
+
+const mailOptions = {
+    from: 'achintya@matrixnmedia.com', // sender's email
+    to: email, // recipient's email
+    subject: 'Approval Status Update',
+    html: `<p> Hii, admin has ${approvalMessage}</p>`,
+}
+
+transporter.sendMail(mailOptions,function(error,result){
+    if(error){
+    console.log(error);
+    //res.status(400).send({success: false, message: "Mail not sent"})
+    reject(error);
+    }
+  else{
+    console.log('Mail has been sent---', result.response);
+    //res.status(200).send({success: true, message: "Mail sent"})
+    resolve(result);
+  }
+   })
+}catch(error){
+//res.status(400).send({success: false, message: error.message})
+console.log(error);
+reject(error);
+}
+})
+}
+
 module.exports = {
     // createUser: async function(req,res){
     //        //if(req.userdata.user_type == "student"){
@@ -91,7 +145,12 @@ module.exports = {
     updateSessionLogout: async function(req,res){
         try{
             const jwt = req.headers["authorization"];
-            const authData = jwtService.verifyToken(jwt);
+            if (!jwt) {
+                return res.status(401).json({ message: "Authorization header is missing" });
+            }
+            console.log(jwt,"JWTJWTJWT");
+            const token = jwt.split(" ")[1];
+            const authData = jwtService.verifyToken(token);
             const sessions_id = authData.id;
             const date = new Date();
             const session = await sessionService.findSession({id: sessions_id});
@@ -137,7 +196,12 @@ module.exports = {
     statusapprove: async function(req,res){
         try{
             const jwt = req.headers["authorization"];
-            const authData = jwtService.verifyToken(jwt);
+            if (!jwt) {
+                return res.status(401).json({ message: "Authorization header is missing" });
+            }
+            const token = jwt.split(" ")[1];
+            console.log(jwt,"JWTJWTJWT");
+            const authData = jwtService.verifyToken(token);
             console.log(authData,"STATUSAPPROVE");
             if(authData.user_type != "admin"){
                 res.json({
@@ -145,9 +209,11 @@ module.exports = {
                 });
             }
             else if(authData.user_type == "admin"){
-               const userid = req.query.id;
-               const status = req.query.approved_status;
-
+            //    const userid = req.query.id;
+            //    const status = req.query.approved_status;
+               const data = req.body;
+               const userid = data.id;
+               const status = data.approved_status;
                if(status !== null && status !== "approved" && status !== "disapproved"){
                 return res.status(400).json({
                     message: "Invalid approved status. Out of choice!!!"
@@ -164,6 +230,11 @@ module.exports = {
                    });
                    if(numUpdatedRows == 0){
                     res.json({message: "admin has disapproved the request"})
+                   }
+                   const user = await models.Users.findByPk(userid);
+                   if(user && status == "approved"){
+                    const useremail = user.email;
+                    statusMail(useremail,status);
                    }
                    return res.status(200).json({message:  `User ID ${userid} has been ${status}.`})
               // }
