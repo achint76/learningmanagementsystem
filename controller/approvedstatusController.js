@@ -51,23 +51,23 @@ reject(error);
 }
 })
 }
-module.exports = {
-    approvalmail: async function(req,res){
-        const email = req.body.email;
-        try{
-            const getmail = await userService.approvalmail({email});
-            console.log(getmail.approved_status,"GETMAIL:::::");
-            if(getmail){
-                statusMail(getmail.email,getmail.approved_status);
-                res.status(200).send({success: true,message: 'Please check your inbox'});
-            }
-            else {
-                // The email does not exist in the database
-                res.status(404).json({ message: "Email not found" });
-              }
-        }catch (error) {
-            // Handle any errors thrown by the validateEmail function
-            res.status(400).json({ message: error.message });
-}
-    }
-}
+// module.exports = {
+//     approvalmail: async function(req,res){
+//         const email = req.body.email;
+//         try{
+//             const getmail = await userService.approvalmail({email});
+//             console.log(getmail.approved_status,"GETMAIL:::::");
+//             if(getmail){
+//                 statusMail(getmail.email,getmail.approved_status);
+//                 res.status(200).send({success: true,message: 'Please check your inbox'});
+//             }
+//             else {
+//                 // The email does not exist in the database
+//                 res.status(404).json({ message: "Email not found" });
+//               }
+//         }catch (error) {
+//             // Handle any errors thrown by the validateEmail function
+//             res.status(400).json({ message: error.message });
+// }
+//     }
+// }

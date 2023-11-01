@@ -7,7 +7,7 @@ const RouterLogin = require('./router/loginRouter');
 const RouterUser = require('./router/userRouter');
 const RouterSubject = require('./router/subjectRouter');
 const RouterTeacher = require('./router/teacherRouter');
-const RouterStatus = require('./router/statusRouter');
+//const RouterStatus = require('./router/statusRouter');
 app.use(express.json());
 
 app.use('/user', RouterSignup);
@@ -15,7 +15,7 @@ app.use('/user', RouterLogin);
 app.use('/user', RouterUser);
 app.use('/subjects', RouterSubject);
 app.use('/teacher', RouterTeacher);
-app.use('/permission', RouterStatus);
+//app.use('/permission', RouterStatus);
 app.get('/', function(req,res){
   res.send('hello World')
 })

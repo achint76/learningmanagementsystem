@@ -204,7 +204,7 @@ module.exports = {
             const authData = jwtService.verifyToken(token);
             console.log(authData,"STATUSAPPROVE");
             if(authData.user_type != "admin"){
-                res.json({
+                return res.status(403).json({
                     message: "Only admin can approve "
                 });
             }
@@ -228,11 +228,14 @@ module.exports = {
                         id: userid
                     }
                    });
-                   if(numUpdatedRows == 0){
-                    res.json({message: "admin has disapproved the request"})
+                   if(numUpdatedRows == 0 && status == "disapproved"){
+                    return res.json({message: "admin has disapproved the request"})
                    }
-                   const user = await models.Users.findByPk(userid);
-                   if(user && status == "approved"){
+                   else if(numUpdatedRows == 0 && status == "approved"){
+                    return res.json({message: "admin has approved the request"})
+                   }
+                   const user = await models.Users.findOne({ where: { id: userid } });
+                   if(user && status == "approved" || status == "disapproved"){
                     const useremail = user.email;
                     statusMail(useremail,status);
                    }

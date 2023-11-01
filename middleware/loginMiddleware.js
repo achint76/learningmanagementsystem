@@ -2,9 +2,15 @@ const jwtService = require('../service/jwtService');
 const { sign, verify } = require("jsonwebtoken");
 const sessionService = require('../service/sessionService');
 async function userProfile(req,res, next){
-    const data = req.headers['authorization'];    
-    if(data){
-        verify(data,"createJwtToken", async(err,authData)=>{
+    const jwt = req.headers['authorization'];    
+    if (!jwt) {
+        return res.status(401).json({ message: "Authorization header is missing" });
+    }
+    console.log(jwt,"JWTJWTJWT");
+            const token = jwt.split(" ")[1];
+            const authData = jwtService.verifyToken(token);
+    if(token){
+        verify(token,"createJwtToken", async(err,authData)=>{
             if(err){
                 res.status(401).json({
                     message:"Unauthorized"
