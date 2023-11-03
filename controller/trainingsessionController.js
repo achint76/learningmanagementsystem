@@ -12,7 +12,17 @@ module.exports = {
                 totalstudents: data.totalstudents,
                 date: data.date
             });
+            res.json({
+                message: 'Sessiuon scheduled',
+                data: createSession
+            });
 
-        }catch(error){}
+        }catch(error){
+            console.log(error,"ERRORERROR");
+            res.status(500).json({
+                message: 'Error occurred',
+                error: error
+            });
+        }
     },
 }
