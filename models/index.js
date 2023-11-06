@@ -6,6 +6,7 @@ const Subject = require('./subject');
 const Teacher = require('./teacher');
 const Subscription = require('./subscription');
 const TrainingSession = require('./trainingsession');
+const StudentChoice = require('./studentsessiondetails');
 sequelize.sync({alter:true});
 
 Subject.hasMany(Teacher, {
@@ -48,5 +49,6 @@ module.exports = {
     Subject,
     Teacher,
     Subscription,
-    TrainingSession
+    TrainingSession,
+    StudentChoice
 }

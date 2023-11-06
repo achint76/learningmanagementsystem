@@ -9,6 +9,7 @@ const RouterSubject = require('./router/subjectRouter');
 const RouterTeacher = require('./router/teacherRouter');
 const RouterSubscription = require('./router/subscriptionRouter');
 const RouterSession = require('./router/trainingsessionRouter');
+const RouterStudentChoice = require('./router/studentsessionRouter');
 //const RouterStatus = require('./router/statusRouter');
 app.use(express.json());
 
@@ -20,7 +21,8 @@ app.use('/teacher', RouterTeacher);
 
 //app.use('/permission', RouterStatus);
 app.use('/student', RouterSubscription);
-app.use('/training-scheduled', RouterSession)
+app.use('/training-scheduled', RouterSession);
+app.use('/studentchoice', RouterStudentChoice);
 
 app.get('/', function(req,res){
   res.send('hello World')

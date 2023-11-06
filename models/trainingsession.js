@@ -26,7 +26,8 @@ const trainingsession = sequelize.define('trainingsessiontable', {
     },
     subscribedstudentscount: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        defaultValue: 0
     }
 }, {
     timestamps: true,
